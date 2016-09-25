@@ -17,6 +17,8 @@ public class Configuration {
     private static Properties configurationProperties = null;
     //Configuration keys
     public static final String CITY_API_URL = "CITY_API_URL";
+    public static final String CSV_FILE_NAME = "CSV_FILE_NAME";
+
     
     /**
      * Private constructor to make sure there is only one configuration object.
@@ -38,8 +40,6 @@ public class Configuration {
     
     /**
      * Load configuration file.
-     * @return:
-     *        true - if it loaded successfully. 
      * @throws 
      *      IOException - if an error occurred when reading from the input stream.
      */
@@ -74,9 +74,6 @@ public class Configuration {
         }
         if (configurationProperties.containsKey(key)) {
             value = configurationProperties.getProperty(key);
-        } else {
-            System.out.println("Property " + key + " doesn't exist in " +PROPERTIES_FILE_NAME 
-                    + " file");
         }
         return value;
     }

@@ -1,5 +1,10 @@
 package com.goeuro.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goeuro.entity.City;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * To add utility stuff
@@ -9,5 +14,10 @@ package com.goeuro.util;
 public class Utils {
     
       
+    public static List<City> getCitiesFromJson(String jsonString) throws IOException{
+        ObjectMapper mapper = new ObjectMapper();
+        List<City> city = mapper.readValue(jsonString, new TypeReference<List<City>>(){});
+        return city;
+    }
     
 }

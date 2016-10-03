@@ -11,8 +11,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class City {
     
-    public enum Header{
-        
+    /*
+     Header of any file we will export city into it.
+    */
+    public enum Header{        
         ID("_id"),
         NAME("name"),
         TYPE("type"),

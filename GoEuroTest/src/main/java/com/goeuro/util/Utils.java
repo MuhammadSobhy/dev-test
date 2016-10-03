@@ -31,15 +31,15 @@ public class Utils {
         try {
             ObjectMapper mapper = new ObjectMapper();
             cities = mapper.readValue(jsonString, new TypeReference<List<City>>(){});
-            if(LOGGER.isDebugEnabled())
-                LOGGER.debug("Processing cities:", cities);
-            else
-                LOGGER.info("Processing cities size:" + cities.size());
-
         } catch (IOException ex) {
             throw new NoSuchCity("Error in extracting cities from JSON" , ex);
         }
-        LOGGER.debug("Leaving getCitiesFromJson()");
+        if(LOGGER.isDebugEnabled())
+            LOGGER.debug("Leaving getCitiesFromJson():" + cities);
+        else if (cities != null)
+            LOGGER.info("Leaving getCitiesFromJson(): cities size " + cities.size());
+        else 
+            LOGGER.debug("Leaving getCitiesFromJson()");
         return cities;
     }
     

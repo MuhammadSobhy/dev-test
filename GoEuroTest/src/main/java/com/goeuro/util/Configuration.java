@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class Configuration {
     
-    public static final Logger LOGGER = LogManager.getRootLogger();
+    private static final Logger LOGGER = LogManager.getRootLogger();
     
     private static Configuration configuration;
     private static final String PROPERTIES_FILE_NAME = "configuration.properties";

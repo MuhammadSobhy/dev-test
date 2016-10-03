@@ -1,20 +1,22 @@
 package com.goeuro.main;
 
-import com.goeuro.facade.MainFacade;
-import com.goeuro.output.CSVExporter;
-import com.goeuro.service.CityBusinessService;
-import com.goeuro.service.RestCityBusinessService;
-import com.goeuro.util.Configuration;
+import com.goeuro.entity.City;
+import com.goeuro.exception.NoSuchCity;
+import com.goeuro.exception.NoSuchConfigurationKey;
+import com.goeuro.facade.CityFacade;
 import java.io.IOException;
+import java.util.List;
+
 
 /**
- *
+ * Main class
  * @author muhammad sobhy
+ * @version 1.0
  */
 public class Application {
 
       
-    MainFacade mainFacade;
+    CityFacade mainFacade;
     
     public static void main(String[] args){
         if (args == null || args.length <= 0) {
@@ -22,22 +24,15 @@ public class Application {
         } else {
             try {
                 new Application().run(args[0]);
-            } catch (IOException ex) {
+            } catch (IOException | NoSuchCity | NoSuchConfigurationKey ex) {
                 System.out.println(ex);
             }
         }
     }
     
-    public void run(String cityName) throws IOException {
-        String cityServiceURL = Configuration.getConfiguration().getValue(Configuration.CITY_API_URL);
-        if (cityServiceURL != null && !cityServiceURL.equals("")) {
-            CityBusinessService cityBusinessService = new RestCityBusinessService(cityServiceURL);
-            CSVExporter cSVExporter = new CSVExporter();
-            mainFacade = new MainFacade(cityBusinessService, cSVExporter);
-            mainFacade.loadCity(cityName);
-        } else {
-            System.out.println(Configuration.CITY_API_URL + " property is missed in configuration file.");
-        }
-    }
-    
+    private void run(String cityName) throws NoSuchConfigurationKey, NoSuchCity, IOException {
+        mainFacade = new CityFacade();
+        List<City> cities = mainFacade.retrieveCityFromRestService(cityName);
+        mainFacade.exportToCSV(cities);
+    }    
 }

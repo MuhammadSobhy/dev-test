@@ -26,7 +26,7 @@ public class Utils {
      * @throws com.goeuro.exception.NoSuchCity
      */
     public static List<City> getCitiesFromJson(String jsonString) throws NoSuchCity{
-        LOGGER.debug("Entering getCitiesFromJson(jsonString=" + jsonString);
+        LOGGER.debug("Entering getCitiesFromJson(jsonString=" + jsonString + ")");
         List<City> cities = null;
         try {
             ObjectMapper mapper = new ObjectMapper();

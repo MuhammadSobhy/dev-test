@@ -12,6 +12,8 @@ import com.goeuro.util.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * City facade to hide complexity and 
@@ -21,7 +23,8 @@ import java.util.List;
  */
 public class CityFacade {
     
-        
+    private static final Logger LOGGER = LogManager.getRootLogger();    
+    
     public CityFacade() {
     }
     
@@ -34,10 +37,17 @@ public class CityFacade {
      * @throws com.goeuro.exception.NoSuchCity 
      */
     public List<City> retrieveCityFromRestService(String cityName)throws NoSuchConfigurationKey, NoSuchCity{
+        LOGGER.debug("Entering retrieveCityFromRestService(cityName=" + cityName + ")");
         String cityServiceURL = Configuration.getConfiguration().getValue(Configuration.CITY_API_URL);
         CityBusinessService cityBusinessService = new RestCityBusinessService(cityServiceURL);
         String jsonCityData = cityBusinessService.getCityByName(cityName);
         List<City> listCityData = Utils.getCitiesFromJson(jsonCityData);
+        if(LOGGER.isDebugEnabled())
+            LOGGER.debug("Leaving retrieveCityFromRestService():" + listCityData);
+        else if (listCityData != null)
+            LOGGER.debug("Leaving retrieveCityFromRestService(): Retrieve cities size:" + listCityData.size());
+        else
+            LOGGER.debug("Leaving retrieveCityFromRestService()");
         return listCityData;
     }
     
@@ -48,9 +58,16 @@ public class CityFacade {
      * @throws IOException 
      */
     public void exportToCSV(List<City> cities) throws NoSuchConfigurationKey, IOException{
+        if(LOGGER.isDebugEnabled())
+            LOGGER.debug("Entering exportToCSV(cities=" + cities + ")");
+        else if (cities != null)
+            LOGGER.debug("Entering exportToCSV(cities size=" + cities.size() + ")");
+        else
+            LOGGER.debug("Entering exportToCSV()");        
         String fileName = Configuration.getConfiguration().getValue(Configuration.CSV_FILE_NAME);  
         Exporter exporter = new CSVExporter(fileName, getHeader(), toListOfStringArray(cities));
         exporter.export();
+        LOGGER.debug("Leaving exportToCSV()");
     }
     
     /**
@@ -58,8 +75,11 @@ public class CityFacade {
      * @return header 
      */
     private String[] getHeader() {
-        return new String[] {City.Header.ID.getName(),City.Header.NAME.getName(),City.Header.TYPE.getName(),
+        LOGGER.debug("Entering getHeader()");
+        String[] header = new String[] {City.Header.ID.getName(),City.Header.NAME.getName(),City.Header.TYPE.getName(),
             City.Header.LONGITUDE.getName(),City.Header.LATITUDE.getName()};
+        LOGGER.debug("Leaving getHeader():" + header);
+        return header;
     }
     
     /**
@@ -68,6 +88,12 @@ public class CityFacade {
      * @return List<String[]>
      */
     private List<String[]> toListOfStringArray(List<City> cities) {
+        if(LOGGER.isDebugEnabled())
+            LOGGER.debug("Entering toListOfStringArray(cities=" + cities + ")");
+        else if (cities != null)
+            LOGGER.debug("Entering toListOfStringArray(cities size=" + cities.size() + ")");
+        else
+            LOGGER.debug("Entering toListOfStringArray()");
         List<String[]> stringArrayOfCities = null;
         if (cities != null && cities.size() > 0) {
             stringArrayOfCities = new ArrayList<>();
@@ -76,6 +102,10 @@ public class CityFacade {
                     String.valueOf(city.getGeoPosition().getLatitude()),String.valueOf(city.getGeoPosition().getLongitude())});
             }
         }
+        else if (stringArrayOfCities != null)
+            LOGGER.debug("Leaving toListOfStringArray():" + stringArrayOfCities.size());
+        else
+            LOGGER.debug("Leaving toListOfStringArray()");
         return stringArrayOfCities;
     }
 }

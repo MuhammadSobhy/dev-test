@@ -14,6 +14,13 @@ import java.util.List;
 public class Utils {
     
       
+    /**
+     * Extract cities from json string
+     * @param jsonString
+     * @return:
+     *      List<City> contains cities extracted from json
+     * @throws IOException 
+     */
     public static List<City> getCitiesFromJson(String jsonString) throws IOException{
         ObjectMapper mapper = new ObjectMapper();
         List<City> city = mapper.readValue(jsonString, new TypeReference<List<City>>(){});

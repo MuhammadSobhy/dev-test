@@ -1,5 +1,6 @@
 package com.goeuro.service;
 
+import com.goeuro.exception.NoSuchCity;
 import java.io.IOException;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -9,19 +10,26 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
- * Rest Business service to call REST web service and return city
+ * Rest city business service
  * @author muhammad sobhy
  * @version 1.0
  */
 public class RestCityBusinessService extends CityBusinessService{
 
+    private final String url;
     
     public RestCityBusinessService(String url) {
-        super(url);
+        this.url = url;
     }
     
+    /**
+     * Call REST web service to inquire about specific city
+     * @param cityName
+     * @return jsonResponse contains city info
+     * @throws NoSuchCity 
+     */
     @Override
-    public String getCityByName(String cityName) throws IOException{
+    public String getCityByName(String cityName) throws NoSuchCity{
         String jsonResponse = "";
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpget = new HttpGet(getUrl() + cityName);
@@ -31,17 +39,34 @@ public class RestCityBusinessService extends CityBusinessService{
             HttpEntity entity = response.getEntity();
             jsonResponse = EntityUtils.toString(entity);
         } catch (IOException ex) {
-            System.out.println("calling city service failed: " + ex);
-            throw ex;
+            throw new NoSuchCity("calling city REST service failed",ex);
         } finally {
             try {
                 if(response != null) 
                     response.close();
             } catch (IOException ex) {
                 System.out.println("closing service response failed: " + ex);
-                throw ex;
+            }
+            try {
+                if(httpClient != null) 
+                    httpClient.close();
+            } catch (IOException ex) {
+                System.out.println("closing service response failed: " + ex);
             }
         }
         return jsonResponse;
     }
+
+    /**
+     * Get service name
+     * @return service name 
+     */
+    @Override
+    public String getBusinessServiceName() {
+        return "Rest City Business Service";
+    }
+    
+    public String getUrl() {
+        return url;
+    }    
 }

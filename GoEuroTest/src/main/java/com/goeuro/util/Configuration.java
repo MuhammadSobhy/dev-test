@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Application's configuration class
@@ -12,6 +14,8 @@ import java.util.Properties;
  * @version 1.0
  */
 public class Configuration {
+    
+    public static final Logger LOGGER = LogManager.getRootLogger();
     
     private static Configuration configuration;
     private static final String PROPERTIES_FILE_NAME = "configuration.properties";
@@ -33,9 +37,11 @@ public class Configuration {
      *        Configuration object
      */
     public static synchronized Configuration getConfiguration() {
+        LOGGER.debug("Entering getConfiguration()");
         if (configuration == null) {
             configuration = new  Configuration();
         }
+        LOGGER.debug("Leaving getConfiguration()");
         return configuration;
     }
     
@@ -45,18 +51,18 @@ public class Configuration {
      *      IOException - if an error occurred when reading from the input stream.
      */
     private void loadConfiguration() throws IOException {
-        long beginTime = System.currentTimeMillis();
+        LOGGER.debug("Entering loadConfiguration()");
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME)) {
             if (inputStream != null) {
                 configurationProperties = new Properties();
                 configurationProperties.load(inputStream);
-                System.out.println("Configuration file loaded successfully in "
-                    + "[" + (System.currentTimeMillis() - beginTime)/1000 + "] sec");
+                LOGGER.debug("Configuration file loaded successfully");
             } else {
                 throw new FileNotFoundException("Please make sure that " + PROPERTIES_FILE_NAME
                     + " file in classpath");
             }
         }
+        LOGGER.debug("Leaving loadConfiguration()");
     }
     
     /**
@@ -68,6 +74,7 @@ public class Configuration {
      * @throws com.goeuro.exception.NoSuchConfigurationKey      
      */
     public String getValue(final String key)throws NoSuchConfigurationKey {
+        LOGGER.debug("Entering getValue(key=" + key);
         String value = null;
         if (key == null)
             throw new NoSuchConfigurationKey("Configuration key is null");
@@ -75,11 +82,12 @@ public class Configuration {
             if (configurationProperties.containsKey(key)) {
                 value = configurationProperties.getProperty(key);
             } else {
-                throw new NoSuchConfigurationKey("No Configuration value for key:" + key);
+                throw new NoSuchConfigurationKey("key " + key + " not existed");
             }
         } else {
             throw new NoSuchConfigurationKey("Configuration file not existed");
         }
+        LOGGER.debug("Leaving getValue():" + value);
         return value;
     }
 }

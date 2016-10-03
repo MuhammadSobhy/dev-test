@@ -1,34 +1,70 @@
 package com.goeuro.output;
 
-import com.goeuro.entity.City;
 import java.util.List;
 import com.opencsv.CSVWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
- *
+ * CSV exporter
  * @author muhammad sobhy
+ * @version 1.0
  */
-public class CSVExporter {
+public class CSVExporter implements Exporter{
     
-    public void export(String fileName , String[] headers , List<City> cityData) throws IOException {
+    private String fileName;
+    private String[] header;
+    private List<String[]> data;
+
+    public CSVExporter(String fileName, String[] header, List<String[]> data) {
+        this.fileName = fileName;
+        this.header = header;
+        this.data = data;
+    }
+    
+    /**
+     * Export data to csv file
+     * @throws IOException 
+     */
+    @Override
+    public void export() throws IOException {
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileName))) {
-            writer.writeNext(headers);
-            writer.writeAll(toListOfStringArray(cityData));
+            writer.writeNext(header);
+            writer.writeAll(data);
         }
     }
     
-    private List<String[]> toListOfStringArray(List<City> cities) {
-        List<String[]> stringArrayOfCities = null;
-        if (cities != null && cities.size() > 0) {
-            stringArrayOfCities = new ArrayList<>();
-            for (City city : cities) {
-                stringArrayOfCities.add(new String[] {String.valueOf(city.getId()),city.getName(),city.getType(),
-                    String.valueOf(city.getGeoPosition().getLatitude()),String.valueOf(city.getGeoPosition().getLongitude())});
-            }
-        }
-        return stringArrayOfCities;
+    public String getFileName() {
+        return fileName;
     }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String[] getHeader() {
+        return header;
+    }
+
+    public void setHeader(String[] header) {
+        this.header = header;
+    }
+
+    public List<String[]> getData() {
+        return data;
+    }
+
+    public void setData(List<String[]> data) {
+        this.data = data;
+    }    
+
+    /**
+     * Get export type
+     * @return export type
+     */
+    @Override
+    public String exportType() {
+        return "CSV Exporter";
+    }
+    
 }

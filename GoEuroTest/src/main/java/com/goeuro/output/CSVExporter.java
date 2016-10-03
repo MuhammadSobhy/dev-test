@@ -4,6 +4,8 @@ import java.util.List;
 import com.opencsv.CSVWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * CSV exporter
@@ -12,6 +14,7 @@ import java.io.IOException;
  */
 public class CSVExporter implements Exporter{
     
+    private static final Logger LOGGER = LogManager.getRootLogger();
     private String fileName;
     private String[] header;
     private List<String[]> data;
@@ -28,10 +31,13 @@ public class CSVExporter implements Exporter{
      */
     @Override
     public void export() throws IOException {
+        LOGGER.debug("Entering export()");
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileName))) {
             writer.writeNext(header);
             writer.writeAll(data);
+            LOGGER.debug("Export data to file:" + fileName + " successfully");
         }
+        LOGGER.debug("Leaving export()");
     }
     
     public String getFileName() {

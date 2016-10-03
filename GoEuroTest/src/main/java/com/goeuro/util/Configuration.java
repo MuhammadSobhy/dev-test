@@ -74,7 +74,7 @@ public class Configuration {
      * @throws com.goeuro.exception.NoSuchConfigurationKey      
      */
     public String getValue(final String key)throws NoSuchConfigurationKey {
-        LOGGER.debug("Entering getValue(key=" + key);
+        LOGGER.debug("Entering getValue(key=" + key + ")");
         String value = null;
         if (key == null)
             throw new NoSuchConfigurationKey("Configuration key is null");

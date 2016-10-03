@@ -1,5 +1,6 @@
 package com.goeuro.util;
 
+import com.goeuro.exception.NoSuchConfigurationKey;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ public class Configuration {
     }
     
     /**
-     * Get single configuration object
+     * Get configuration object
      * @return:
      *        Configuration object
      */
@@ -40,7 +41,7 @@ public class Configuration {
     
     /**
      * Load configuration file.
-     * @throws 
+     * @throws
      *      IOException - if an error occurred when reading from the input stream.
      */
     private void loadConfiguration() throws IOException {
@@ -61,19 +62,23 @@ public class Configuration {
     /**
      * Read value from configuration file.
      * @param 
-     *      key - the property key.
+     *      key - the value key.
      * @return 
      *      The value in configuration file with the specified key value.      
-     * @throws
-     *      java.io.IOException      
+     * @throws com.goeuro.exception.NoSuchConfigurationKey      
      */
-    public String getValue(final String key) throws IOException {
+    public String getValue(final String key)throws NoSuchConfigurationKey {
         String value = null;
-        if (configurationProperties == null) {
-            loadConfiguration();
-        }
-        if (configurationProperties.containsKey(key)) {
-            value = configurationProperties.getProperty(key);
+        if (key == null)
+            throw new NoSuchConfigurationKey("Configuration key is null");
+        if (configurationProperties != null) {
+            if (configurationProperties.containsKey(key)) {
+                value = configurationProperties.getProperty(key);
+            } else {
+                throw new NoSuchConfigurationKey("No Configuration value for key:" + key);
+            }
+        } else {
+            throw new NoSuchConfigurationKey("Configuration file not existed");
         }
         return value;
     }

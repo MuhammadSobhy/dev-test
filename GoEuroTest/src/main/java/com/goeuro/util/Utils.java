@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class Utils {
     
-    public static final Logger LOGGER = LogManager.getRootLogger();
+    private static final Logger LOGGER = LogManager.getRootLogger();
     
     /**
      * Extract cities from json string

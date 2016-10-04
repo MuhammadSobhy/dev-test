@@ -10,7 +10,6 @@ import com.goeuro.output.Exporter;
 import com.goeuro.service.CityBusinessService;
 import com.goeuro.service.RestCityBusinessService;
 import com.goeuro.util.Configuration;
-import com.goeuro.util.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

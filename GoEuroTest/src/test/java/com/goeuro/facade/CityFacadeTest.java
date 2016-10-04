@@ -1,34 +1,21 @@
 package com.goeuro.facade;
 
-import com.goeuro.output.CSVExporter;
-import com.goeuro.service.CityBusinessService;
-import com.goeuro.service.RestCityBusinessService;
+import com.goeuro.exception.NoSuchCity;
+import com.goeuro.exception.NoSuchConfigurationKey;
 import com.goeuro.util.Configuration;
 import java.io.IOException;
-import junit.framework.Assert;
 import org.junit.Test;
 
 /**
  *
  * @author muhammad sobhy
  */
-public class MainFacadeTest {
+public class CityFacadeTest {
     
     @Test
-    public void testLoadCityWithRome() throws IOException {
-        String url = Configuration.getConfiguration().getValue(Configuration.CITY_API_URL);
-        CityBusinessService cityBusinessService = new RestCityBusinessService(url);
-        CSVExporter cSVExporter = new CSVExporter();
-        MainFacade mainFacade = new MainFacade(cityBusinessService, cSVExporter);
-        mainFacade.loadCity("Rome");
+    public void testLoadCityWithRome() throws IOException, NoSuchConfigurationKey, NoSuchCity {
+        Configuration.getConfiguration().loadConfiguration();
+        CityFacade mainFacade = new CityFacade();
+        mainFacade.exportToCSV(mainFacade.retrieveCityFromRestService("Rome"));
     }
-
-//    @Test
-//    public void testLoadCityWithUnknown() throws IOException {
-//        String url = Configuration.getConfiguration().getValue(Configuration.CITY_API_URL);
-//        CityBusinessService cityBusinessService = new RestCityBusinessService(url);
-//        CSVExporter cSVExporter = new CSVExporter();
-//        MainFacade mainFacade = new MainFacade(cityBusinessService, cSVExporter);
-//        mainFacade.loadCity("unknown");
-//    }
 }

@@ -35,7 +35,7 @@ public class CSVExporter implements Exporter{
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileName))) {
             writer.writeNext(header);
             writer.writeAll(data);
-            LOGGER.debug("Export data to file:" + fileName + " successfully");
+            LOGGER.debug("Export data to file [" + fileName + "] successfully");
         }
         LOGGER.debug("Leaving export()");
     }

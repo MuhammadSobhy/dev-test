@@ -4,6 +4,7 @@ import com.goeuro.entity.City;
 import com.goeuro.exception.NoSuchCity;
 import com.goeuro.exception.NoSuchConfigurationKey;
 import com.goeuro.facade.CityFacade;
+import com.goeuro.util.Configuration;
 import java.io.IOException;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +24,7 @@ public class Application {
     public static void main(String[] args){
         LOGGER.debug("Entering main(args=" + args + ")");
         if (args == null || args.length <= 0) {
-            LOGGER.debug("Please pass city name to app.");
+            LOGGER.error("Please pass city name to app.");
         } else {
             try {
                 new Application().run(args[0]);
@@ -36,6 +37,7 @@ public class Application {
     
     private void run(String cityName) throws NoSuchConfigurationKey, NoSuchCity, IOException {
         LOGGER.debug("Entering run(cityName=" + cityName + ")");
+        Configuration.getConfiguration().loadConfiguration();
         mainFacade = new CityFacade();
         List<City> cities = mainFacade.retrieveCityFromRestService(cityName);
         mainFacade.exportToCSV(cities);

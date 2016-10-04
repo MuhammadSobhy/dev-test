@@ -7,6 +7,17 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = 'com.goeuro.main.Application'
 }
 
+jar {
+    manifest {
+        attributes "Main-Class": "$mainClass"
+    }
+    archiveName = 'GoEuroTest.jar'
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+
 repositories {
     mavenCentral()
 }

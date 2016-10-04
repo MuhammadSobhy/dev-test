@@ -6,6 +6,7 @@ import com.goeuro.exception.NoSuchConfigurationKey;
 import com.goeuro.facade.CityFacade;
 import com.goeuro.util.Configuration;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,12 +23,13 @@ public class Application {
     CityFacade mainFacade;
     
     public static void main(String[] args){
-        LOGGER.debug("Entering main(args=" + args + ")");
+        LOGGER.debug("Entering main(args=" + Arrays.toString(args) + ")");
         if (args == null || args.length <= 0) {
             LOGGER.error("Please pass city name to app.");
         } else {
             try {
                 new Application().run(args[0]);
+                LOGGER.info("Retrieve " + args[0] + " info and export it to csv successfully");
             } catch (IOException | NoSuchCity | NoSuchConfigurationKey ex) {
                 LOGGER.error(ex.getMessage() , ex);
             }

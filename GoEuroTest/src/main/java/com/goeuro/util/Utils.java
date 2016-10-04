@@ -37,7 +37,7 @@ public class Utils {
         if(LOGGER.isDebugEnabled())
             LOGGER.debug("Leaving getCitiesFromJson():" + cities);
         else if (cities != null)
-            LOGGER.info("Leaving getCitiesFromJson(): cities size " + cities.size());
+            LOGGER.debug("Leaving getCitiesFromJson(): cities size " + cities.size());
         else 
             LOGGER.debug("Leaving getCitiesFromJson()");
         return cities;

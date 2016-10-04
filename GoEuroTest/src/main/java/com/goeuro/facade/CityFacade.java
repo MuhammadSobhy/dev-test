@@ -11,6 +11,7 @@ import com.goeuro.util.Configuration;
 import com.goeuro.util.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -78,7 +79,7 @@ public class CityFacade {
         LOGGER.debug("Entering getHeader()");
         String[] header = new String[] {City.Header.ID.getName(),City.Header.NAME.getName(),City.Header.TYPE.getName(),
             City.Header.LONGITUDE.getName(),City.Header.LATITUDE.getName()};
-        LOGGER.debug("Leaving getHeader():" + header);
+        LOGGER.debug("Leaving getHeader():" + Arrays.toString(header));
         return header;
     }
     
@@ -102,8 +103,8 @@ public class CityFacade {
                     String.valueOf(city.getGeoPosition().getLatitude()),String.valueOf(city.getGeoPosition().getLongitude())});
             }
         }
-        else if (stringArrayOfCities != null)
-            LOGGER.debug("Leaving toListOfStringArray():" + stringArrayOfCities.size());
+        if (stringArrayOfCities != null)
+            LOGGER.debug("Leaving toListOfStringArray(): size " + stringArrayOfCities.size());
         else
             LOGGER.debug("Leaving toListOfStringArray()");
         return stringArrayOfCities;

@@ -50,7 +50,7 @@ public class Configuration {
      * @throws
      *      IOException - if an error occurred when reading from the input stream.
      */
-    private void loadConfiguration() throws IOException {
+    public void loadConfiguration() throws IOException {
         LOGGER.debug("Entering loadConfiguration()");
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME)) {
             if (inputStream != null) {
@@ -82,10 +82,10 @@ public class Configuration {
             if (configurationProperties.containsKey(key)) {
                 value = configurationProperties.getProperty(key);
             } else {
-                throw new NoSuchConfigurationKey("key " + key + " not existed");
+                throw new NoSuchConfigurationKey("key " + key + " not exists");
             }
         } else {
-            throw new NoSuchConfigurationKey("Configuration file not existed");
+            throw new NoSuchConfigurationKey("Configuration file not exists");
         }
         LOGGER.debug("Leaving getValue():" + value);
         return value;

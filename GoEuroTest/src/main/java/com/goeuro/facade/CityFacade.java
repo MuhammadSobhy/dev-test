@@ -1,5 +1,7 @@
 package com.goeuro.facade;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goeuro.entity.City;
 import com.goeuro.exception.NoSuchCity;
 import com.goeuro.exception.NoSuchConfigurationKey;
@@ -42,7 +44,7 @@ public class CityFacade {
         String cityServiceURL = Configuration.getConfiguration().getValue(Configuration.CITY_API_URL);
         CityBusinessService cityBusinessService = new RestCityBusinessService(cityServiceURL);
         String jsonCityData = cityBusinessService.getCityByName(cityName);
-        List<City> listCityData = Utils.getCitiesFromJson(jsonCityData);
+        List<City> listCityData = getCitiesFromJson(jsonCityData);
         if(LOGGER.isDebugEnabled())
             LOGGER.debug("Leaving retrieveCityFromRestService():" + listCityData);
         else if (listCityData != null)
@@ -108,5 +110,30 @@ public class CityFacade {
         else
             LOGGER.debug("Leaving toListOfStringArray()");
         return stringArrayOfCities;
+    }
+    
+    /**
+     * Extract cities from json string
+     * @param jsonString
+     * @return:
+     *      List<City>: contains cities extracted from json
+     * @throws com.goeuro.exception.NoSuchCity
+     */
+    private static List<City> getCitiesFromJson(String jsonString) throws NoSuchCity{
+        LOGGER.debug("Entering getCitiesFromJson(jsonString=" + jsonString + ")");
+        List<City> cities = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            cities = mapper.readValue(jsonString, new TypeReference<List<City>>(){});
+        } catch (IOException ex) {
+            throw new NoSuchCity("Error in extracting cities from JSON" , ex);
+        }
+        if(LOGGER.isDebugEnabled())
+            LOGGER.debug("Leaving getCitiesFromJson():" + cities);
+        else if (cities != null)
+            LOGGER.debug("Leaving getCitiesFromJson(): cities size " + cities.size());
+        else 
+            LOGGER.debug("Leaving getCitiesFromJson()");
+        return cities;
     }
 }
